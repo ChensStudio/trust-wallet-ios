@@ -2,6 +2,7 @@
 
 import UIKit
 import Eureka
+import UserNotifications
 
 struct NotificationChange: Codable {
     let isEnabled: Bool
@@ -23,12 +24,9 @@ class NotificationsViewController: FormViewController {
         static let payment = "payment"
     }
 
-    var didChange: ((_ change: NotificationChanged) -> Void)?
+    private var isNotificationsEnabled: Bool = false
 
-    private static var isPushNotificationEnabled: Bool {
-        guard let settings = UIApplication.shared.currentUserNotificationSettings else { return false }
-        return UIApplication.shared.isRegisteredForRemoteNotifications && !settings.types.isEmpty
-    }
+    var didChange: ((_ change: NotificationChanged) -> Void)?
 
     private var showOptionsCondition: Condition {
         return Condition.predicate(NSPredicate(format: "$\(Keys.pushNotifications) == false"))
@@ -39,6 +37,9 @@ class NotificationsViewController: FormViewController {
     ) {
         self.preferencesController = preferencesController
         super.init(nibName: nil, bundle: nil)
+        isNotificationsEnabled { [weak self] success in
+            self?.isNotificationsEnabled = success
+        }
     }
 
     override func viewDidLoad() {
@@ -50,7 +51,7 @@ class NotificationsViewController: FormViewController {
 
             <<< SwitchRow(Keys.pushNotifications) {
                 $0.title = NSLocalizedString("settings.allowPushNotifications.button.title", value: "Allow Push Notifications", comment: "")
-                $0.value = NotificationsViewController.isPushNotificationEnabled
+                $0.value = isNotificationsEnabled
             }.onChange { [unowned self] row in
                 self.didChange?(.state(isEnabled: row.value ?? false))
             }.cellSetup { cell, _ in
@@ -81,6 +82,12 @@ class NotificationsViewController: FormViewController {
         didChange?(.preferences(
             NotificationsViewController.getPreferences()
         ))
+    }
+
+    private func isNotificationsEnabled(completion:@escaping (Bool)->() ) {
+        UNUserNotificationCenter.current().getNotificationSettings() { (settings) in
+            completion (settings.soundSetting == .enabled)
+        }
     }
 
     static func getPreferences() -> Preferences {
