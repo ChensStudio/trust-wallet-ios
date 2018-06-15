@@ -91,7 +91,7 @@ class AccountsCoordinator: Coordinator {
             controller.addAction(exportPrivateKeyAction)
         case .hd(let account):
             let actionTitle = NSLocalizedString("wallets.backupPhrase.alertSheet.title", value: "Export Recovery Phrase", comment: "")
-            let action = UIAlertAction(title: actionTitle, style: .default) { [unowned self] _ in
+            _ = UIAlertAction(title: actionTitle, style: .default) { [unowned self] _ in
                 let coordinator = ExportPhraseCoordinator(
                     keystore: self.keystore,
                     account: account

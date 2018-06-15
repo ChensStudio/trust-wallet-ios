@@ -80,7 +80,7 @@ class TokensViewModel: NSObject {
     }
 
     private var amount: String? {
-        let totalAmount = tokens.lazy.flatMap { [weak self] in
+        let totalAmount = tokens.lazy.compactMap { [weak self] in
             self?.amount(for: $0)
         }.reduce(0, +)
         return CurrencyFormatter.formatter.string(from: NSNumber(value: totalAmount))
