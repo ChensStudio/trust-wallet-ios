@@ -84,9 +84,9 @@ class NotificationsViewController: FormViewController {
         ))
     }
 
-    private func isNotificationsEnabled(completion:@escaping (Bool)->() ) {
-        UNUserNotificationCenter.current().getNotificationSettings() { (settings) in
-            completion (settings.soundSetting == .enabled)
+    private func isNotificationsEnabled(completion: @escaping (Bool) -> Void ) {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            completion(settings.soundSetting == .enabled)
         }
     }
 
