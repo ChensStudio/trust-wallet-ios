@@ -76,8 +76,8 @@ enum RPCServer {
         }
     }
 
-    var address: String {
-        return "0x0000000000000000000000000000000000000000"
+    var address: Address {
+        return Address.zero
     }
 
     var decimals: Int {
@@ -109,8 +109,8 @@ enum RPCServer {
             case .ropsten: return "wss://ropsten.infura.io/ws/llyrtzQ3YhkdESt2Fzrk"
             case .rinkeby: return "wss://rinkeby.infura.io/ws/llyrtzQ3YhkdESt2Fzrk"
             case .kovan: return "wss://kovan.infura.io/ws/llyrtzQ3YhkdESt2Fzrk"
-            case .poa, .sokol: return ""
-            case .classic, .callisto: return ""
+            case .poa, .sokol: return "wss://localhost"
+            case .classic, .callisto: return "wss://localhost"
             case .custom(let custom): return custom.wssEndpoint
             }
         }()

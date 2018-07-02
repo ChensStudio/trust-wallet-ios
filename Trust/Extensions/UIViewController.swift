@@ -37,7 +37,7 @@ extension UIViewController {
         alertController.addAction(UIAlertAction(title: okTitle, style: okStyle, handler: { _ in
             completion(.success(()))
         }))
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", value: "Cancel", comment: ""), style: .cancel, handler: { _ in
+        alertController.addAction(UIAlertAction(title: R.string.localizable.cancel(), style: .cancel, handler: { _ in
             completion(.failure(ConfirmationError.cancel))
         }))
         self.present(alertController, animated: true, completion: nil)
@@ -74,5 +74,12 @@ extension UIViewController {
         viewController.willMove(toParentViewController: nil)
         viewController.view.removeFromSuperview()
         viewController.removeFromParentViewController()
+    }
+
+    func showShareActivity(from sender: UIView, with items: [Any], completion: (() -> Swift.Void)? = nil) {
+        let activityViewController = UIActivityViewController.make(items: items)
+        activityViewController.popoverPresentationController?.sourceView = sender
+        activityViewController.popoverPresentationController?.sourceRect = sender.centerRect
+        present(activityViewController, animated: true, completion: completion)
     }
 }

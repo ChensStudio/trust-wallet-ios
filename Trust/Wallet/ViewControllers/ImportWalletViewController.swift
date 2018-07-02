@@ -56,7 +56,8 @@ class ImportWalletViewController: FormViewController {
 
         title = viewModel.title
         navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(image: R.image.import_options(), style: .done, target: self, action: #selector(importOptions)),
+            // Disabled, since iCloud entitlment is missing. Required for the transfer to the new entity
+            // UIBarButtonItem(image: R.image.import_options(), style: .done, target: self, action: #selector(importOptions)),
             UIBarButtonItem(image: R.image.qr_code_icon(), style: .done, target: self, action: #selector(openReader)),
         ]
 
@@ -72,18 +73,7 @@ class ImportWalletViewController: FormViewController {
         )
 
         form
-            +++ Section {
-                var header = HeaderFooterView<InfoHeaderView>(.class)
-                header.height = { 90 }
-                header.onSetupView = { (view, section) -> Void in
-                    view.label.textColor = AppStyle.formHeader.textColor
-                    view.label.font = AppStyle.formHeader.font
-                    view.label.text = NSLocalizedString("importing.wallet.message", value: "Importing wallet as easy as creating", comment: "")
-                    view.logoImageView.image = R.image.create_wallet_import()
-                }
-                $0.header = header
-            }
-
+            +++ Section()
             <<< SegmentedRow<String>(Values.segment) {
                 $0.options = [
                     ImportSelectionType.keystore.title,
@@ -224,7 +214,7 @@ class ImportWalletViewController: FormViewController {
         ) { _ in
             self.showDocumentPicker()
         })
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", value: "Cancel", comment: ""), style: .cancel) { _ in })
+        alertController.addAction(UIAlertAction(title: R.string.localizable.cancel(), style: .cancel) { _ in })
         present(alertController, animated: true)
     }
 
